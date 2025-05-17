@@ -158,21 +158,83 @@ class _ChatSectionState extends State<ChatSection> {
   final Color textColor = const Color(0xFF2C2C2A);
   
   String activeFilter = 'Все чаты';
-  final List<ChatItem> allChats = List.generate(10, (index) {
-    final isGroup = index % 3 == 0;
-    final isUnread = index % 4 == 0;
-    final isPersonal = !isGroup;
+  final List<ChatItem> allChats = [
+    // Личные чаты
+    ChatItem(
+      id: 1,
+      name: 'Анна К.',
+      lastMessage: 'Привет! Как насчет кино завтра?',
+      isGroup: false,
+      isUnread: true,
+      isPersonal: true,
+      lastMessageTime: DateTime.now().subtract(const Duration(minutes: 15)),
+    ),
+    ChatItem(
+      id: 2,
+      name: 'Максим И.',
+      lastMessage: 'Отправляю тебе билеты на концерт',
+      isGroup: false,
+      isUnread: false,
+      isPersonal: true,
+      lastMessageTime: DateTime.now().subtract(const Duration(hours: 2)),
+    ),
+    ChatItem(
+      id: 3,
+      name: 'Ольга С.',
+      lastMessage: 'Где встречаемся перед выставкой?',
+      isGroup: false,
+      isUnread: true,
+      isPersonal: true,
+      lastMessageTime: DateTime.now().subtract(const Duration(minutes: 45)),
+    ),
     
-    return ChatItem(
-      id: index,
-      name: isGroup ? 'Группа ${index + 1}' : 'Пользователь ${index + 1}',
-      lastMessage: 'Последнее сообщение в чате ${index + 1}',
-      isGroup: isGroup,
-      isUnread: isUnread,
-      isPersonal: isPersonal,
-      lastMessageTime: DateTime.now().subtract(Duration(hours: index % 5 + 1)),
-    );
-  });
+    // Групповые чаты
+    ChatItem(
+      id: 4,
+      name: 'Киноманы',
+      lastMessage: 'Иван: Новый фильм Нолана просто бомба!',
+      isGroup: true,
+      isUnread: false,
+      isPersonal: false,
+      lastMessageTime: DateTime.now().subtract(const Duration(hours: 3)),
+    ),
+    ChatItem(
+      id: 5,
+      name: 'Концерт Metallica',
+      lastMessage: 'Мария: Я купила билеты на сектор B',
+      isGroup: true,
+      isUnread: true,
+      isPersonal: false,
+      lastMessageTime: DateTime.now().subtract(const Duration(minutes: 20)),
+    ),
+    ChatItem(
+      id: 6,
+      name: 'Футбольные фанаты',
+      lastMessage: 'Алексей: Кто идет на матч в субботу?',
+      isGroup: true,
+      isUnread: false,
+      isPersonal: false,
+      lastMessageTime: DateTime.now().subtract(const Duration(days: 1)),
+    ),
+    ChatItem(
+      id: 7,
+      name: 'Гастротуры по Азии',
+      lastMessage: 'Елена: В этом кафе просто потрясающие том-ямы!',
+      isGroup: true,
+      isUnread: true,
+      isPersonal: false,
+      lastMessageTime: DateTime.now().subtract(const Duration(hours: 5)),
+    ),
+    ChatItem(
+      id: 8,
+      name: 'Книжный клуб',
+      lastMessage: 'Дмитрий: Предлагаю обсудить "1984" в следующий раз',
+      isGroup: true,
+      isUnread: false,
+      isPersonal: false,
+      lastMessageTime: DateTime.now().subtract(const Duration(days: 2)),
+    ),
+  ];
 
   List<ChatItem> get filteredChats {
     switch (activeFilter) {
@@ -574,25 +636,25 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<ChatMessage> _messages = [
     ChatMessage(
-      text: 'Привет! Как дела?',
+      text: 'Отлично! Встречаемся у входа в 18:00',
       isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 30))),
-    ChatMessage(
-      text: 'Отлично, спасибо! А у тебя?',
-      isMe: true,
-      time: DateTime.now().subtract(const Duration(minutes: 25))),
-    ChatMessage(
-      text: 'Тоже всё хорошо. Пойдешь на концерт завтра?',
-      isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 20))),
+      time: DateTime.now().subtract(const Duration(minutes: 10))),
     ChatMessage(
       text: 'Да, конечно! Уже купил билеты',
       isMe: true,
       time: DateTime.now().subtract(const Duration(minutes: 15))),
     ChatMessage(
-      text: 'Отлично! Встречаемся у входа в 18:00',
+      text: 'Тоже всё хорошо. Пойдешь на концерт завтра?',
       isMe: false,
-      time: DateTime.now().subtract(const Duration(minutes: 10))),
+      time: DateTime.now().subtract(const Duration(minutes: 20))),
+    ChatMessage(
+      text: 'Отлично, спасибо! А у тебя?',
+      isMe: true,
+      time: DateTime.now().subtract(const Duration(minutes: 25))),
+    ChatMessage(
+      text: 'Привет! Как дела?',
+      isMe: false,
+      time: DateTime.now().subtract(const Duration(minutes: 30))),
   ];
 
   @override

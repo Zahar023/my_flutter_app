@@ -8,6 +8,7 @@ class EventsTab extends StatefulWidget {
 }
 
 class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
+  final List<Map<String, dynamic>> _favoriteEvents = [];
   // Расширенная цветовая палитра
   final List<Color> _categoryColors = [
     const Color(0xFF025239), // Основной зеленый
@@ -74,28 +75,38 @@ class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
   final Map<String, List<Map<String, dynamic>>> _eventsByCategory = {
     'Концерты': [
       {
-        'title': 'Концерт группы "Кино"',
-        'date': '15 мая 2023, 20:00',
-        'place': 'Стадион "Лужники"',
-        'price': 'от 1500 ₽',
-        'image': 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-        'description': 'Легендарная группа "Кино" снова на сцене! Юбилейный тур в честь 40-летия группы.',
+        'title': 'Концерт Xolidayboy"',
+        'date': '23 мая 2025, 20:00',
+        'place': 'Сибирь - Арена',
+        'price': 'от 1600 ₽',
+        'image': 'assets/images/xolidayboy.jpg',
+        'description': 'Новосибирск ул. Немировича-Данченко, 160\n 23 мая 2025, пятница, 20:00',
       },
     ],
     'Кино': [
       {
-        'title': 'Премьера "Аватар 3"',
-        'date': '20 мая 2023',
-        'place': 'Кинотеатр "Октябрь"',
+        'id': '1',
+        'title': 'Кракен',
+        'date': 'c 17 апреля',
+        'place': 'в 12 кинотеатрах',
         'price': 'от 500 ₽',
-        'image': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
-        'description': 'Новая часть культового фильма Джеймса Кэмерона.',
+        'image': 'assets/images/Кракен.jpg',
+        'description': 'Экипаж подводной лодки ищет пропавший крейсер и сталкивается с гигантским чудовищем. Звёзды российского кино в боевике от создателей «Экипажа» и «Т-34»',
+        'ticketUrl': 'https://example.com/tickets/123',
+      },
+      {
+        'title': 'В списках не значился',
+        'date': 'с 1 мая',
+        'place': 'в 14 кинотеатрах',
+        'price': 'от 500 ₽',
+        'image': 'assets/images/вСписках.jpg',
+        'description': '19-летний лейтенант прибывает на службу в Брестскую крепость 21 июня 1941 года. Военная драма по повести Бориса Васильева',
       },
     ],
     'Спорт': [
       {
         'title': 'Футбольный матч',
-        'date': '25 мая 2023, 19:30',
+        'date': '25 мая 2025, 19:30',
         'place': 'Стадион "Спартак"',
         'price': 'от 2000 ₽',
         'image': 'https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80',
@@ -388,25 +399,21 @@ class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16)),
-              child: Image.network(
-                event['image'],
-                height: 140,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  height: 140,
-                  color: const Color(0xFFF6F6F6),
-                  child: Center(
-                    child: Icon(
-                      Icons.broken_image,
-                      color: const Color(0xFFB6BDAB),
-                      size: 40,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+  child: event['image'].startsWith('http') 
+      ? Image.network(  // Для сетевых изображений
+          event['image'],
+          height: 140,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildErrorPlaceholder(),
+        )
+      : Image.asset(  // Для локальных изображений
+          event['image'],
+          height: 140,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildErrorPlaceholder(),
+        ),
+),
             Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
@@ -493,26 +500,23 @@ class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
                       ),
                       const SizedBox(height: 24),
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
-                          event['image'],
-                          height: 200,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                            height: 200,
-                            color: const Color(0xFFF6F6F6),
-                            child: Center(
-                              child: Icon(
-                                Icons.broken_image,
-                                color: const Color(0xFFB6BDAB),
-                                size: 50,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+  borderRadius: BorderRadius.circular(12),
+  child: event['image'].startsWith('http')
+      ? Image.network(  // Для сетевых
+          event['image'],
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildErrorPlaceholder(),
+        )
+      : Image.asset(  // Для локальных
+          event['image'],
+          height: 200,
+          width: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildErrorPlaceholder(),
+        ),
+),
                       const SizedBox(height: 24),
                       Text(
                         event['title'],
@@ -593,6 +597,19 @@ class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
       },
     );
   }
+
+Widget _buildErrorPlaceholder() {
+  return Container(
+    color: const Color(0xFFF6F6F6),
+    child: Center(
+      child: Icon(
+        Icons.broken_image,
+        color: const Color(0xFFB6BDAB),
+        size: 40,
+      ),
+    ),
+  );
+}
 
   Widget _buildDetailSection(IconData icon, String title, String value) {
     return Padding(
@@ -731,4 +748,20 @@ class _EventsTabState extends State<EventsTab> with TickerProviderStateMixin {
       ),
     );
   }
+
+  void _toggleFavorite(Map<String, dynamic> event) {
+  final favorites = _favoriteEvents; // List<Map> в состоянии
+  final isFavorite = favorites.any((e) => e['id'] == event['id']);
+  
+  setState(() {
+    if (isFavorite) {
+      favorites.removeWhere((e) => e['id'] == event['id']);
+    } else {
+      favorites.add(event);
+    }
+  });
+  
+  // Здесь можно добавить сохранение в SharedPreferences или БД
+}
+
 }
